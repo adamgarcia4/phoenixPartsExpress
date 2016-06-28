@@ -1,14 +1,8 @@
 var express = require('express');
 var router = express.Router();
-var firebase = require('firebase');
+var firebase = require('../modules/firebase');
 
-firebase.initializeApp({
-  serviceAccount: "serviceAcc.json",
-  databaseURL: "https://phoenixparts-6923b.firebaseio.com/"
-});
-var db = firebase.database();
-var ref = db.ref("root");
-var usersRef = ref.child("users");
+var usersRef = firebase.child("users");
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -58,7 +52,7 @@ router.post('/register', function(req, res){
             "username" : username,
             "password" : password
         };
-        console.log(newUser);
+        //console.log(newUser);
         usersRef.push(newUser);
         res.redirect('login');
     }

@@ -1,0 +1,4 @@
+http://stackoverflow.com/questions/37337080/initialize-firebase-refs-in-two-seprate-files-in-new-api
+
+https://scotch.io/tutorials/authenticate-a-node-js-api-with-json-web-tokens
+
