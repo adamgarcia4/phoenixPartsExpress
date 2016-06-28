@@ -1,5 +1,14 @@
 var express = require('express');
 var router = express.Router();
+var firebase = require('firebase');
+
+firebase.initializeApp({
+  serviceAccount: "serviceAcc.json",
+  databaseURL: "https://phoenixparts-6923b.firebaseio.com/"
+});
+var db = firebase.database();
+var ref = db.ref("root");
+var usersRef = ref.child("users");
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -35,20 +44,24 @@ router.post('/register', function(req, res){
     req.checkBody('password', 'Password is required').notEmpty();
     req.checkBody('password2', 'Password is required').notEmpty();
     req.checkBody('password2', 'Passwords do not match').equals(password);
-    console.log('check working');
-    //var errors = req.validationErrors();
-    res.render('register');    
-    // if(errors){
-    //     res.render('register',{
-    //         errors:errors
-    //     })
-    // } else {
-    //     res.redirect('login');
-    // }
-
-
-
-
+    //console.log('check working');
+    var errors = req.validationErrors();
+    // res.render('register');    
+    if(errors){
+        res.render('register',{
+            errors:errors
+        });
+    } else {
+        var newUser = {
+            "name" : name,
+            "email" : email,
+            "username" : username,
+            "password" : password
+        };
+        console.log(newUser);
+        usersRef.push(newUser);
+        res.redirect('login');
+    }
 });
 
 module.exports = router;

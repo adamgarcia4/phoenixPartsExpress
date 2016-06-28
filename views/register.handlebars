@@ -1,10 +1,12 @@
 <h2 class="page-header">Register</h2>
 {{#if errors}}
+    <div class="alert alert-danger">
+    <ul class="list-group">
     {{#each errors}}
-        <div class="alert alert-danger">
-            {{msg}}
-        </div>
+            <li class="list-group-item">{{msg}}</li>
     {{/each}}
+    </ul>
+    </div>
 {{/if}}
 
 <form method="post" action="/users/register">

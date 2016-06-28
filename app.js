@@ -9,21 +9,6 @@ var exphbs = require('express-handlebars');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
-
-//Firebase Stuff
-var firebase = require('firebase');
-
-firebase.initializeApp({
-  serviceAccount: "serviceAcc.json",
-  databaseURL: "https://phoenixparts-6923b.firebaseio.com/"
-});
-
-var db = firebase.database();
-var ref = db.ref("restricted_access/secret_document");
-ref.once("value", function(snapshot) {
-  //console.log(snapshot.val());
-});
-
 var app = express();
 
 // view engine setup
