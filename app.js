@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -6,6 +8,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var expressValidator = require('express-validator');
 var exphbs = require('express-handlebars');
+var session = require('client-sessions');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
@@ -44,6 +47,14 @@ app.use(expressValidator({
   }
 }));
 
+//Session Handler Middleware
+app.use(session({
+  cookieName: 'session',
+  secret: 'alkdsjf;lkasdjfl;kasjdflk;ajsdghasdfj',
+  duration: 30 * 60 * 1000,
+  activeDuration: 5 * 60 * 1000,
+}));
+
 app.use('/', routes);
 app.use('/users', users);
 
@@ -76,6 +87,16 @@ app.use(function(err, req, res, next) {
     message: err.message,
     error: {}
   });
+});
+
+/// MONGOOOSE Database Linking ****
+var mongoose = require('mongoose');
+var connectDBLink = process.env.MONGO_DB;
+mongoose.connect(connectDBLink);
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function(callback) {
+  console.log("DB opened");
 });
 
 

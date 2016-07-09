@@ -1,13 +1,13 @@
 var express = require('express');
 var router = express.Router();
-var firebase = require('../modules/firebase');
-
-var usersRef = firebase.child("users");
+var User = require("../models/User.js");
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   res.render('login');
 });
+
+
 
 router.get('/login', function(req, res, next) {
   //render view
@@ -33,8 +33,9 @@ router.post('/login',function(req, res) {
         });
     } else {
         console.log('login ready to be authenticated');
+        req.session.user = user;
         usersRef.orderByChild("username").on("value", function(snapshot) {
-            console.log(snapshot);
+            console.log(snapshot.val());
         });
 
         res.redirect('login');
@@ -51,38 +52,70 @@ router.post('/register', function(req, res){
     console.log('post working!');
     
     //Capture user info
-    var name = req.body.name;
     var email = req.body.email;
     var username = req.body.username;
     var password = req.body.password;
     var password2 = req.body.password2;
+    var firstName = req.body.firstName;
+    var lastName = req.body.lastName;
+
     
     //Validate using checkBody (from body-parser middleware)
-    req.checkBody('name', 'Name is required').notEmpty();
     req.checkBody('email', 'Email is required').notEmpty();
     req.checkBody('email', 'Email is not valid').isEmail();
     req.checkBody('username', 'Username is required').notEmpty();
     req.checkBody('password', 'Password is required').notEmpty();
     req.checkBody('password2', 'Password is required').notEmpty();
     req.checkBody('password2', 'Passwords do not match').equals(password);
-    //console.log('check working');
+    req.checkBody('firstName', 'First Name is required').notEmpty(); 
+    req.checkBody('lastName' , 'Last Name is required').notEmpty();
+    
     var errors = req.validationErrors();
+
     // res.render('register');    
     if(errors){
         res.render('register',{
             errors:errors
         });
     } else {
-        var newUser = {
-            "name" : name,
-            "email" : email,
-            "username" : username,
-            "password" : password
-        };
-        //console.log(newUser);
-        usersRef.push(newUser);
-        res.redirect('login');
+        //successful, so create schema and save.
+
+        var newUser = User();
+        newUser.email = email;
+        newUser.username = username;
+        newUser.password = hashUserPassword(password);
+        newUser.firstName = firstName;
+        newUser.lastName = lastName;
+
+        //save schema to db
+        newUser.save(function (err, user) {
+            if(err) {
+                res.status(401).json({
+                    status: false,
+                    user: undefined,
+                    message: err,
+                });
+            } else {
+                res.status(200).json({
+                    status: true,
+                    user: newUser,
+                    message: "Account successfully created!",
+                });
+            }
+        });
+
+        //res.redirect('login');
     }
 });
+
+var salt = 'imsaltyaf7';
+var Crypto = require('crypto');
+function hashUserPassword(password) {
+  return Crypto
+    .createHash('sha1')
+    .update(salt + password + salt)
+    .digest("hex")
+    .substring(0,6);
+};
 
 module.exports = router;
