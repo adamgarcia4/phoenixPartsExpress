@@ -15,31 +15,39 @@ router.get('/login', function(req, res, next) {
 });
 
 router.post('/login',function(req, res) {
-    console.log('login post working!');
 
     //capture input info
-    var user = req.body.name;
+    var user = req.body.username;
     var pass = req.body.password;
 
     //validate using checkBody (from body-parser middleware)
     req.checkBody('username','Username is required').notEmpty();
     req.checkBody('password','Password is required').notEmpty();
+    pass = hashUserPassword(pass);
 
     var errors = req.validationErrors();
     //Redirect back to login if errors
-   if(errors){
+   if(errors == null){
         res.render('login',{
             errors:errors
         });
     } else {
         console.log('login ready to be authenticated');
-        req.session.user = user;
-        usersRef.orderByChild("username").on("value", function(snapshot) {
-            console.log(snapshot.val());
+        
+        User.findOne({'username' : user, 'password' : pass}, function (err, doc) {
+            if(doc==null) {
+                console.log('User not found')
+                res.redirect('login'); //TODO: Error message not showing
+            } else {
+                console.log('user is: ' + doc.username);
+                console.log('pass is: ' + doc.password);
+                console.log('hi');
+                res.redirect('login');
+            }
         });
 
-        res.redirect('login');
-        };
+
+    };
 });
 
 router.get('/register', function(req, res, next) {
