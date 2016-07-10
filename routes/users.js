@@ -45,8 +45,6 @@ router.post('/login',function(req, res) {
                 res.redirect('login');
             }
         });
-
-
     };
 });
 
@@ -116,6 +114,7 @@ router.post('/register', function(req, res){
     }
 });
 
+//Enable hashing
 var salt = 'imsaltyaf7';
 var Crypto = require('crypto');
 function hashUserPassword(password) {
