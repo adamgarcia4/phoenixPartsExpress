@@ -1,5 +1,7 @@
-require('dotenv').config();
+// Server Injection Head
 
+//Import Middlewares
+require('dotenv').config();
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -11,8 +13,9 @@ var exphbs = require('express-handlebars');
 var session = require('client-sessions');
 var routes = require('./routes/index');
 var users = require('./routes/users');
-
 var app = express();
+var passport = require('passport');
+var Strategy = require('passport-local').Strategy;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -20,13 +23,11 @@ app.engine('handlebars', exphbs({defaultLayout:'layout'}));
 app.set('view engine', 'handlebars');
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico'))); //TODO: Favicon Doesn't work
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-
-
 app.use(express.static(path.join(__dirname, 'public')));
 
 //Express Validator
@@ -55,6 +56,7 @@ app.use(session({
   activeDuration: 5 * 60 * 1000,
 }));
 
+//Routes Middleware
 app.use('/', routes);
 app.use('/users', users);
 
