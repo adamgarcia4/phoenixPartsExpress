@@ -1,6 +1,51 @@
+// Users.js--Route Handler
+
+//********Import Dependencies************
+
 var express = require('express');
 var router = express.Router();
+
+// Passport Dependencies
+var passport = require('passport');
+var localStrategy = require('passport-local').Strategy;
+
+// Model Dependency
 var User = require("../models/User.js");
+
+
+
+//************Passport Strategy Setup*************
+
+passport.use(new localStrategy(
+    function(username, password, done) {
+        User.getUserByUsername(username, function(err, user) {
+            if(err) throw err;
+            if(!user) {
+                return(null, false, {message: 'Unknown User'});
+            }
+            User.comparePassword(password, user.password,function(err, isMatch) {
+                if(err) throw err;
+                if(isMatch) {
+                    return done(null, user);
+                } else {
+                    return done(null, false, {message: 'Invalid Password'});
+                }
+            });
+        });
+    }
+));
+
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  User.getUserById(id, function(err, user) {
+    done(err, user);
+  });
+});
+
+//**************Routes*****************
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -8,45 +53,28 @@ router.get('/', function(req, res, next) {
 });
 
 
-
+//**************Login**********************
 router.get('/login', function(req, res, next) {
   //render view
   res.render('login');
 });
 
-router.post('/login',function(req, res) {
+router.post('/login',
+    passport.authenticate('local', {
+        successRedirect:'/',
+        failureRedirect:'/users/login',
+        failureFlash: true}
+    ),
+    function(req, res) {
+        res.redirect('/');
+    }
+);
 
-    //capture input info
-    var user = req.body.username;
-    var pass = req.body.password;
 
-    //validate using checkBody (from body-parser middleware)
-    req.checkBody('username','Username is required').notEmpty();
-    req.checkBody('password','Password is required').notEmpty();
-    pass = hashUserPassword(pass);
 
-    var errors = req.validationErrors();
-    //Redirect back to login if errors
-   if(errors == null){
-        res.render('login',{
-            errors:errors
-        });
-    } else {
-        console.log('login ready to be authenticated');
-        
-        User.findOne({'username' : user, 'password' : pass}, function (err, doc) {
-            if(doc==null) {
-                console.log('User not found')
-                res.redirect('login'); //TODO: Error message not showing
-            } else {
-                console.log('user is: ' + doc.username);
-                console.log('pass is: ' + doc.password);
-                console.log('hi');
-                res.redirect('login');
-            }
-        });
-    };
-});
+    // router.post('/login',function(req, res) {
+
+//****************Register*********************
 
 router.get('/register', function(req, res, next) {
   //render view
@@ -89,40 +117,33 @@ router.post('/register', function(req, res){
         var newUser = User();
         newUser.email = email;
         newUser.username = username;
-        newUser.password = hashUserPassword(password);
+        newUser.password = password;
         newUser.firstName = firstName;
         newUser.lastName = lastName;
 
         //save schema to db
-        newUser.save(function (err, user) {
-            if(err) {
-                res.status(401).json({
-                    status: false,
-                    user: undefined,
-                    message: err,
-                });
-            } else {
-                res.status(200).json({
-                    status: true,
-                    user: newUser,
-                    message: "Account successfully created!",
-                });
-            }
+        User.createUser(newUser, function(err, user) {
+            if(err) throw err;
+            console.log(user);
         });
 
-        //res.redirect('login');
+        req.flash('success_msg', 'You are registered and can now login');
+        res.redirect('login');
     }
 });
 
-//Enable hashing
-var salt = 'imsaltyaf7';
-var Crypto = require('crypto');
-function hashUserPassword(password) {
-  return Crypto
-    .createHash('sha1')
-    .update(salt + password + salt)
-    .digest("hex")
-    .substring(0,6);
-};
+
+
+//****************Logout************************
+
+router.get('/logout', function(req, res) {
+    req.logout();
+
+
+    req.flash('success_msg', 'You are logged out');
+
+    res.redirect('login');
+})
+
 
 module.exports = router;
