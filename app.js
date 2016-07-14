@@ -1,4 +1,4 @@
-// Server Injection Head
+// App Starting Point
 
 //*********Import Middlewares*************
 
@@ -20,7 +20,6 @@ var expressValidator = require('express-validator');
 var session = require('express-session');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-
 
 // Flash Message Handlers
 var flash = require('connect-flash');
@@ -48,6 +47,7 @@ db.once('open', function(callback) {
 });
 
 
+
 //***********View Engine Setup***************
 app.set('views', path.join(__dirname, 'views'));
 app.engine('handlebars', exphbs({defaultLayout:'layout'}));
@@ -58,7 +58,7 @@ app.set('view engine', 'handlebars');
 //***********Parser Middlewares****************
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico'))); //TODO: Favicon Doesn't work
+app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico'))); //TODO: Favicon Doesn't work
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

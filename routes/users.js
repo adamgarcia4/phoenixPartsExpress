@@ -49,14 +49,14 @@ passport.deserializeUser(function(id, done) {
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.render('login');
+  res.render('./users/login');
 });
 
 
 //**************Login**********************
 router.get('/login', function(req, res, next) {
   //render view
-  res.render('login');
+  res.render('./users/login');
 });
 
 router.post('/login',
@@ -78,7 +78,7 @@ router.post('/login',
 
 router.get('/register', function(req, res, next) {
   //render view
-  res.render('register');
+  res.render('./users/register');
 });
 
 //Register User
@@ -108,7 +108,7 @@ router.post('/register', function(req, res){
 
     // res.render('register');    
     if(errors){
-        res.render('register',{
+        res.render('./users/register',{
             errors:errors
         });
     } else {
@@ -128,7 +128,7 @@ router.post('/register', function(req, res){
         });
 
         req.flash('success_msg', 'You are registered and can now login');
-        res.redirect('login');
+        res.redirect('/users/login');
     }
 });
 
@@ -142,7 +142,7 @@ router.get('/logout', function(req, res) {
 
     req.flash('success_msg', 'You are logged out');
 
-    res.redirect('login');
+    res.redirect('/users/login');
 })
 
 
