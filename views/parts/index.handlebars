@@ -2,34 +2,28 @@
 <p>Welcome to your dashboard!</p>
 
 <div class="container-fluid">
-
-
-	<div class="table">
+	<table class="table table-hover table-striped table-bordered">
 		<thead>
 			<tr>
 				<th>Part Number</th>
-				<th>Part Type</th>
-				<th>Part Name</th>
-				<th>Parent</th>
+				<th>Type</th>
+				<th>Name</th>
 				<th>Status</th>
 				<th>Action</th>
 			</tr>
 		</thead>
 		<tbody>
-			<td>Adam></td>
+			{{#each locals.partsList}}
+				<tr>
+					<th scope="row">{{this.partNumber}}</th>
+					<td>{{this.partType}}</td>
+					<td>{{this.partName}}</td>
+					<td>{{this.status}}</td>
+					<td>Action</td>
+				</tr>
+			{{/each}}
 		</tbody>
-	</div>
-	{{#each locals.partsList}}
-
-		<div class="panel panel-default col-lg-6">
-			<div class="panel-heading"> {{this.partName}} </div>
-			<div class="panel-body">{{this.notes}}</div>
-		</div>
-
-	{{/each}}
-
-
-
+	</table>
 </div>
 
 <a href="/parts/create" class="btn btn-success">Create Part</a>

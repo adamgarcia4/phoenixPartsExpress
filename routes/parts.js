@@ -13,7 +13,17 @@ var Part = require("../models/Part.js");
 
 /* GET parts listing. */
 router.get('/', function(req, res, next) {
-	res.render('./parts/index');
+
+	Part.find(function(err, parts) {
+
+		res.render('./parts/index', {
+			locals: {
+				test : 'hi',
+				partsList : parts
+
+			}
+		});
+	});
 });
 
 
@@ -32,9 +42,6 @@ router.post('/create', function(req, res, next) {
 	var partNotes = req.body.notes;
 	var status = req.body.status;
 	var partQuantity = req.body.quantity;
-
-	// console.log(req.body.status);
-	// console.log(partStatus);
 
 	//Validate using checkBody (from body-parser middleware)
 	req.checkBody('partNumber', 'Part Number is required').notEmpty();
@@ -70,20 +77,15 @@ router.post('/create', function(req, res, next) {
 
 		req.flash('success_msg', 'You have successfully created your part!');
 		res.redirect('/parts/');
-
-
-		//res.send('part created');
 	}
-
-
-
-
-
-	// var accumulate = [];
-	// // console.log(partNumber);
-	// accumulate["partNumber"] = partNumber;
-
-	
 });
+
+
+//****************READ**********************
+router.get('/:id', function(req, res, next) {
+	res.send("ID Number is : " + req.params.id);
+})
+
+
 
 module.exports = router;
