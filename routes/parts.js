@@ -88,9 +88,27 @@ router.post('/create', function(req, res, next) {
 });
 
 
-//****************READ**********************
+//****************Get By ID**********************
 router.get('/:id', function(req, res, next) {
-	res.send("ID Number is : " + req.params.id);
+	
+	var candidateId = req.params.id;
+
+	Part.getPartById(candidateId).then(
+		function(newPart) {
+			res.render('./parts/' + candidateId);
+		},
+		function(error) {
+			console.log('Error is: ' + error);
+			// req.method = 'get';
+			// res.render('users/register', {
+			// 	errors: error
+			// });
+			req.flash('error_msg', "Part Number : '" + candidateId + "' Does Not Exist");
+			res.redirect('./');
+		}
+	);
+
+	//res.send("ID Number is : " + req.params.id);
 })
 
 

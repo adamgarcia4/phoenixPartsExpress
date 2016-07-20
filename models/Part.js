@@ -52,6 +52,21 @@ module.exports.createPart = function(newPart) {
 	});
 };
 
+module.exports.getPartById = function(partReq) {
+	return new Promise(function(fulfill, reject) {
+		this.Part.find({'partNumber' : partReq}, function(err, docs) {
+			if(docs && docs.length==1) {
+				console.log('docs is: ' + docs);
+				fulfill(docs);
+			} else if (!docs) {
+				reject([{param: "noPartFound", msg:  "Part Number : '" + partReq.partNumber + "' Not Found", value: ""}]);
+			} else {
+				reject([{param: "multiplePartsFound", msg:  "Part Number : '" + partReq.partNumber + "' Found '" + docs.length + "'' Times", value: ""}]);
+			}
+		});
+	});
+};
+
 //Uniqueness Error Handling for Part Number | Implemented as a promise
 checkUniquePartNum = function(newPart, partNum) {
 	return new Promise(function(fulfill, reject) {
