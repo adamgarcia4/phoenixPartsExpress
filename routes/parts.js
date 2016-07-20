@@ -50,8 +50,6 @@ router.post('/create', function(req, res, next) {
 	req.checkBody('status', 'Part Status is required').notEmpty();
 	//req.checkBody('partQuantity', 'Quantity is required').notEmpty();
 
-
-
 	var validationErrors = req.validationErrors();
 
 	//******If Form Valid, post part**********
@@ -70,13 +68,20 @@ router.post('/create', function(req, res, next) {
 		newPart.quantity = partQuantity;
 
 		//save schema to db
-		Part.createPart(newPart, function(err, part) {
-			if (err) throw err;
-			console.log(part);
-		});
+		
 
-		req.flash('success_msg', 'You have successfully created your part!');
-		res.redirect('/parts/');
+		Part.createPart(newPart).then(
+			function(newPart) {
+				console.log('Create Part Success', newPart);
+				req.flash('success_msg', 'You have successfully created your part!');
+				res.redirect('/parts/');
+			},
+			function(error) {
+				console.log('Create Part Failure', error);
+				res.render('./parts/create', {
+					errors: error
+				});
+			});
 	}
 });
 
