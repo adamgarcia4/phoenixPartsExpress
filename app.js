@@ -86,8 +86,6 @@ app.use(expressValidator({
   }
 }));
 
-
-
 //*************Session Setup********************
 
 // Express Session Initialization
@@ -100,8 +98,6 @@ app.use(session({
 // Passport Configuration
 app.use(passport.initialize());
 app.use(passport.session());
-
-
 
 
 //************Connect Flash********************

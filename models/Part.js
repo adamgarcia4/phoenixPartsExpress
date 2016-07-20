@@ -47,13 +47,14 @@ module.exports.createPart = function(newPart) {
 	return new Promise(function(fulfill, reject) {
 		//Query DB for any repeated part
 		this.Part.find({'partNumber' : newPart.partNumber}, function(err, docs) {
-			if(err && (11000 === err.code || 11001 === err.code)) {
-				reject({param: 'nonUniquePart', msg: 'Part Number in DB', value: ''});
-			} else if (err) {
-				reject(new Error('Some Other DB save Error...'));
-			} else {
+			
+			//if Query returns empty, then no uniqueness conflicts, so save part
+			if(docs.length == 0) {
 				newPart.save();
 				fulfill(newPart);
+			} else {
+				//found a matching partNumber in Database, so render error
+				reject([{param: 'nonUniquePart', msg: 'Part Number Already Taken', value: ''}]);
 			}
 		});
 	});

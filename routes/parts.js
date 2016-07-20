@@ -51,7 +51,7 @@ router.post('/create', function(req, res, next) {
 	//req.checkBody('partQuantity', 'Quantity is required').notEmpty();
 
 	var validationErrors = req.validationErrors();
-
+	console.log(validationErrors);
 	//******If Form Valid, post part**********
 	if(validationErrors) {
 		res.render('./parts/create', {
@@ -78,10 +78,12 @@ router.post('/create', function(req, res, next) {
 			},
 			function(error) {
 				console.log('Create Part Failure', error);
+				//TODO: Error persists on refresh after rendering out error
 				res.render('./parts/create', {
 					errors: error
 				});
-			});
+			}
+		);
 	}
 });
 
