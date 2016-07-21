@@ -10,25 +10,25 @@
     </div>
 {{/if}}
 
-<form method="post" action="/parts/create">
+<form method="post" action="/parts/update">
 	<div class="form-group">
 		<label>Part Number</label>
-		<input type="number" class="form-control" placeholder="Part Number" name="partNumber">
+		<input type="number" class="form-control" value="{{locals.retrPart.partNumber}}" placeholder="Part Number" name="partNumber">
 	</div>
 
 	<div class="form-group">
 		<label>Project Id</label>
-		<input type="number" class="form-control" placeholder="Project Id" name="projectId">
+		<input type="number" class="form-control" value="{{locals.retrPart.partNumber}}" placeholder="Project Id" name="projectId">
 	</div>
 
 	<div class="form-group">
 		<label>Part Type</label>
-		<input type="text" class="form-control" placeholder="Part Type" name="partType">
+		<input type="text" class="form-control" value="{{locals.retrPart.partType}}" placeholder="Part Type" name="partType">
 	</div>
 
 	<div class="form-group">
 		<label>Part Name</label>
-		<input type="text" class="form-control" placeholder="Part Name" name="partName">
+		<input type="text" class="form-control" value="{{locals.retrPart.partName}}" placeholder="Part Name" name="partName">
 	</div>
 
 	<div class="form-group">
@@ -38,13 +38,18 @@
 
 	<div class="form-group">
 		<label>Status</label>
-		<input type="text" class="form-control" placeholder="Part Status" name="status">
+		<input type="text" class="form-control" value="{{locals.retrPart.status}}" placeholder="Part Status" name="status">
 	</div>
 
 	<div class="form-group">
 		<label>Quantity</label>
-		<input type="text" class="form-control" placeholder="Quantity" name="quantity">
+		<input type="text" class="form-control" value="{{locals.retrPart.quantity}}" placeholder="Quantity" name="quantity">
 	</div>
 	
 	<button type="submit" class="btn btn-default">Submit</button>
+
+
 </form>
+
+{{locals.retrPart}}
+{{locals.partNum}}

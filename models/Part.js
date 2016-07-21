@@ -38,7 +38,41 @@ var PartSchema = new Schema({
 module.exports = Part = mongoose.model('Part', PartSchema);
 
 
+//*************CRUD Operations**************************
+
+//******************CREATE Part*******************
 module.exports.createPart = function(newPart) {
+//return promise with .then if save successful or .catch to handle errors saving
+	return new Promise(function(fulfill, reject) {
+		//Query DB for any repeated part
+		checkUniquePartNum(newPart, newPart.partNumber)
+			.then(function(newPart) {
+				newPart.save();
+				fulfill(newPart);
+			}, function(errMessage) {
+				reject(errMessage);
+			});
+	});
+};
+
+//******************READ Part*******************
+//get all part listings
+//.then returns all valid part Object Data
+//.error returns DB error
+module.exports.getParts = function() {
+	return new Promise(function(fulfill, reject) {
+		this.Part.find(function(err, parts) {
+			if(err) {
+				reject([{param: "dbReadError", msg: "Error Reading Part Listings", value: ""}])
+			} else {
+				fulfill(parts);
+			}
+		});
+	});
+};
+
+
+module.exports.updatePart = function(newPart) {
 //return promise with .then if save successful or .catch to handle errors saving
 	return new Promise(function(fulfill, reject) {
 		//Query DB for any repeated part
