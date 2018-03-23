@@ -108,12 +108,15 @@ router.post('/register', function(req, res){
 
     // res.render('register');    
     if(errors){
-        res.render('register',{
-            errors:errors
-        });
+    	console.log('error!');
+	    res.status(404)        // HTTP status 404: NotFound
+		    .send('Not found');
+        // res.render('register',{
+        //     errors:errors
+        // });
     } else {
+    	console.log('yay!');
         //successful, so create schema and save.
-
         var newUser = User();
         newUser.email = email;
         newUser.username = username;

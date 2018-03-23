@@ -28,31 +28,46 @@ var flash = require('connect-flash');
 // View/templating Engine
 var exphbs = require('express-handlebars');
 
-// Establish routing handles
-var routes = require('./routes/index');
-var users = require('./routes/users');
-
 //Initialize app
 var app = express();
 
+var Task = require('./models/Parts');
+
+
+// const mongoose = require('mongoose');
+// mongoose.connect('mongodb://localhost/test');
+//
 
 
 //******** MONGOOOSE Database Linking ********
+var mongo = require('./modules/mongoose')(app);
+app.use(mongo);
+
+// // Establish MongoDB Connection
+// var mongoose = require('mongoose');
+// mongoose.Promise = require('bluebird');
+// var connectDBLink = process.env.MONGO_DB;
+// mongoose.connect(connectDBLink);
+// var db = mongoose.connection;
+// db.on('error', console.error.bind(console, 'connection error:'));
+// db.once('open', function (callback) {
+// 	console.log("DB opened");
+// });
+
 var mongoose = require('mongoose');
-var connectDBLink = process.env.MONGO_DB;
-mongoose.connect(connectDBLink);
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function(callback) {
-  console.log("DB opened");
+
+const Cat = mongoose.model('Cat', {name: String});
+
+const kitty = new Cat({name: 'Zildjian'});
+kitty.save().then(function () {
+	console.log('meow')
 });
 
 
 //***********View Engine Setup***************
 app.set('views', path.join(__dirname, 'views'));
-app.engine('handlebars', exphbs({defaultLayout:'layout'}));
+app.engine('handlebars', exphbs({defaultLayout: 'layout'}));
 app.set('view engine', 'handlebars');
-
 
 
 //***********Parser Middlewares****************
@@ -61,7 +76,7 @@ app.set('view engine', 'handlebars');
 //app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico'))); //TODO: Favicon Doesn't work
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 
 // Set static folder for WWW to use
@@ -69,38 +84,35 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Express Validator
 app.use(expressValidator({
-  errorFormatter: function(param, msg, value) {
-      var namespace = param.split('.')
-      , root    = namespace.shift()
-      , formParam = root;
+	errorFormatter: function (param, msg, value) {
+		var namespace = param.split('.')
+			, root = namespace.shift()
+			, formParam = root;
 
-    while(namespace.length) {
-      formParam += '[' + namespace.shift() + ']';
-    }
-    return {
-      param : formParam,
-      msg   : msg,
-      value : value
-    };
-  }
+		while (namespace.length) {
+			formParam += '[' + namespace.shift() + ']';
+		}
+		return {
+			param: formParam,
+			msg: msg,
+			value: value
+		};
+	}
 }));
-
 
 
 //*************Session Setup********************
 
 // Express Session Initialization
 app.use(session({
-    secret: 'secret',
-    resave: true,
-    saveUninitialized: true
+	secret: 'secret',
+	resave: true,
+	saveUninitialized: true
 }));
 
 // Passport Configuration
 app.use(passport.initialize());
 app.use(passport.session());
-
-
 
 
 //************Connect Flash********************
@@ -109,26 +121,31 @@ app.use(flash());
 
 // Global Vars
 app.use(function (req, res, next) {
-  res.locals.success_msg = req.flash('success_msg');
-  res.locals.error_msg = req.flash('error_msg');
-  res.locals.error = req.flash('error'); //passport sets its own errors to error
-  res.locals.user = req.user || null;
-  next();
+	res.locals.success_msg = req.flash('success_msg');
+	res.locals.error_msg = req.flash('error_msg');
+	res.locals.error = req.flash('error'); //passport sets its own errors to error
+	res.locals.user = req.user || null;
+	next();
 });
-
 
 
 //**********Routes Middleware******************
+
+// Establish routing handles
+var routes = require('./routes/index');
+var users = require('./routes/users');
+var parts = require('./routes/parts');
+
 app.use('/', routes);
 app.use('/users', users);
+parts(app);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+app.use(function (req, res, next) {
+	var err = new Error('Not Found');
+	err.status = 404;
+	next(err);
 });
-
 
 
 //***********Error Handlers***************
@@ -136,23 +153,23 @@ app.use(function(req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error: err
-    });
-  });
+	app.use(function (err, req, res, next) {
+		res.status(err.status || 500);
+		res.render('error', {
+			message: err.message,
+			error: err
+		});
+	});
 }
 
 // production error handler
 // no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {}
-  });
+app.use(function (err, req, res, next) {
+	res.status(err.status || 500);
+	res.render('error', {
+		message: err.message,
+		error: {}
+	});
 });
 
 module.exports = app;
