@@ -1,20 +1,14 @@
-'use strict';
-module.exports = function(app) {
-	var usersController = require('../controllers/usersController');
 
-	// todoList Routes
-	app.route('/login')
-		.post(usersController.authenticateUser);
+var passport = require('../modules/passport');
 
-	app.route('/register')
-		.post(usersController.registerUser);
-
-
-	// app.route('/users/:taskId')
-	// 	.get(todoList.read_a_task)
-	// 	.put(todoList.update_a_task)
-	// 	.delete(todoList.delete_a_task);
+exports.authenticateUser = function(req,res) {
+	console.log('Authenticate User time!');
 };
+
+exports.registerUser = function(req, res) {
+	console.log('Time to register a user!!');
+};
+
 
 //
 // // Users.js--Route Handler
@@ -34,37 +28,31 @@ module.exports = function(app) {
 //
 // //************Passport Strategy Setup*************
 //
-// passport.use(new localStrategy(
-//     function(username, password, done) {
-//         User.getUserByUsername(username, function(err, user) {
-//             if(err) throw err;
-//             if(!user) {
-//                 return(null, false, {message: 'Unknown User'});
-//             }
-//             User.comparePassword(password, user.password,function(err, isMatch) {
-//                 if(err) throw err;
-//                 if(isMatch) {
-//                     return done(null, user);
-//                 } else {
-//                     return done(null, false, {message: 'Invalid Password'});
-//                 }
-//             });
-//         });
-//     }
-// ));
-//
-// passport.serializeUser(function(user, done) {
-//   done(null, user.id);
-// });
-//
-// passport.deserializeUser(function(id, done) {
-//   User.getUserById(id, function(err, user) {
-//     done(err, user);
-//   });
-// });
 //
 // //**************Routes*****************
-
+//
+// /* GET users listing. */
+// router.get('/', function(req, res, next) {
+//   res.render('login');
+// });
+//
+//
+// //**************Login**********************
+// router.get('/login', function(req, res, next) {
+//   //render view
+//   res.render('login');
+// });
+//
+// router.post('/login',
+//     passport.authenticate('local', {
+//         successRedirect:'/',
+//         failureRedirect:'/users/login',
+//         failureFlash: true}
+//     ),
+//     function(req, res) {
+//         res.redirect('/');
+//     }
+// );
 //
 //
 //

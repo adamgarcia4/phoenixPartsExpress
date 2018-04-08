@@ -1,11 +1,56 @@
 'use strict';
 
+var mongoose = require('mongoose');
+var Part = mongoose.model('Parts');
+var Comment = mongoose.model('PartComment');
 
-var mongoose = require('mongoose'),
-	Task = mongoose.model('Tasks');
+exports.listAllParts = function(req, res) {
 
-exports.list_all_tasks = function(req, res) {
-	Task.find({}, function(err, task) {
+	Part.find({}, function(err, part) {
+		if (err)
+			res.send(err);
+		res.json(part);
+	});
+};
+
+
+exports.createPart = function(req, res) {
+
+	// Extract part fields from request
+	var new_part_obj = {
+		name: req.body.name,
+		comments: req.body.comments
+	};
+	// console.log(new_part_obj.comments);
+
+	// TODO: Validation checking
+	const new_part = new Part(new_part_obj);
+
+	// Save Part to Database
+	new_part.save().then(function(err,part) {
+		if(err) res.send(err);
+		res.json(part);
+	});
+
+	var new_comment_obj = {
+		body: 'Test body'
+	};
+
+	const new_comment = new Comment(new_comment_obj);
+
+	new_comment.save().then(function(err, com) {
+		console.log('save hit!')
+		console.log(com);
+	});
+
+};
+
+
+exports.getPartById = function(req, res) {
+
+	var partId = req.params.partId;
+
+	Part.findById(partId, function(err, task) {
 		if (err)
 			res.send(err);
 		res.json(task);
@@ -13,10 +58,13 @@ exports.list_all_tasks = function(req, res) {
 };
 
 
-exports.create_a_task = function(req, res) {
-	var new_task = new Task(req.body);
-	new_task.save(function(err, task) {
-		console.log('test1')
+exports.updatePart = function(req, res) {
+
+	var partId = req.params.partId;
+	var newData = req.body;
+
+	Part.findOneAndUpdate({_id: partId}, newData, {new: true}, function(err, task) {
+
 		if (err)
 			res.send(err);
 		res.json(task);
@@ -24,32 +72,15 @@ exports.create_a_task = function(req, res) {
 };
 
 
-exports.read_a_task = function(req, res) {
-	Task.findById(req.params.taskId, function(err, task) {
+exports.deleteTask = function(req, res) {
+
+	var partId = req.params.partId;
+
+	Part.remove({
+		_id: partId
+	}, function(err, part) {
 		if (err)
 			res.send(err);
-		res.json(task);
-	});
-};
-
-
-exports.update_a_task = function(req, res) {
-	Task.findOneAndUpdate({_id: req.params.taskId}, req.body, {new: true}, function(err, task) {
-		if (err)
-			res.send(err);
-		res.json(task);
-	});
-};
-
-
-exports.delete_a_task = function(req, res) {
-
-
-	Task.remove({
-		_id: req.params.taskId
-	}, function(err, task) {
-		if (err)
-			res.send(err);
-		res.json({ message: 'Task successfully deleted' });
+		res.json({ message: 'Part successfully deleted', data: part });
 	});
 };

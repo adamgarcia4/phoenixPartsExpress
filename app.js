@@ -31,7 +31,8 @@ var exphbs = require('express-handlebars');
 //Initialize app
 var app = express();
 
-var Task = require('./models/Parts');
+var Part = require('./models/Parts');
+var PartComment = require('./models/PartComment');
 
 
 // const mongoose = require('mongoose');
@@ -137,7 +138,8 @@ var users = require('./routes/users');
 var parts = require('./routes/parts');
 
 app.use('/', routes);
-app.use('/users', users);
+// app.use('/users', users);
+users(app);
 parts(app);
 
 // catch 404 and forward to error handler
@@ -154,11 +156,16 @@ app.use(function (req, res, next) {
 // will print stacktrace
 if (app.get('env') === 'development') {
 	app.use(function (err, req, res, next) {
+
 		res.status(err.status || 500);
-		res.render('error', {
+		res.send({
 			message: err.message,
 			error: err
 		});
+		// res.render('error', {
+		// 	message: err.message,
+		// 	error: err
+		// });
 	});
 }
 

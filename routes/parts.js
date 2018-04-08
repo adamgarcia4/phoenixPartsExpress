@@ -1,15 +1,14 @@
 'use strict';
 module.exports = function(app) {
-	var todoList = require('../controllers/partsController');
+	var partsController = require('../controllers/partsController');
 
 	// todoList Routes
-	app.route('/tasks')
-		.get(todoList.list_all_tasks)
-		.post(todoList.create_a_task);
+	app.route('/parts')
+		.get(partsController.listAllParts)
+		.post(partsController.createPart);
 
-
-	app.route('/tasks/:taskId')
-		.get(todoList.read_a_task)
-		.put(todoList.update_a_task)
-		.delete(todoList.delete_a_task);
+	app.route('/parts/:partId')
+		.get(partsController.getPartById)
+		.put(partsController.updatePart)
+		.delete(partsController.deleteTask);
 };

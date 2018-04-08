@@ -5,102 +5,85 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-// var PartCommentSchema = new Schema({
-// 	name: {
-// 		type: String,
-// 		required: 'User name',
-// 		default: 'Mr. B'
-// 	},
-// 	body: {
-// 		type: String,
-// 		required: 'Please enter Text Body',
-// 		default: 'This is a default Comment message'
-// 	},
-// 	date: {
-// 		type: Date,
-// 		default: Date.now
-// 	},
-// 	imgUrl: {
-// 		type: String,
-// 		default: 'www.google.com'
-// 	},
-// 	children: {
-// 		type: [PartCommentSchema],
-// 		default: []
-// 	}
-// });
-
-var PartSchema = new Schema({
-	name: {
+var PartCommentSchema = new Schema({
+	partId: {
 		type: String,
-		required: 'Please enter a part name',
-		default: 'Drive Shaft'
+		// required: 'Pleaase enter Parent Part ID'
 	},
-	number: {
+	parentId: {
+		type: Schema.Types.ObjectId
+	},
+	slug: {
+		type: String
+	},
+	body: {
 		type: String,
-		default: '4-2018-01-101'
+		required: 'Please enter Text Body',
+		default: 'This is a default Comment message'
 	},
-	quantity: {
-		type: Number,
-		default: 2
-	},
-	stockMaterial: {
-		type: String,
-		default: '6061-T6'
-	},
-	cutLg: {
-		type: String,
-		default: '2 in'
-	},
-	status: {
-		type: String,
-		default: 'In Progress'
-	},
-	drawnBy: {
-		type: String,
-		default: 'Adam'
-	},
-	machinesNeeded: {
-		type: [String],
-		default: ['BandSaw', 'CNC Mill', 'CNC Lathe']
-	},
-	stockOrdered: {
-		type: Boolean,
-		default: false
-	},
-	partLocation: {
-		type: String,
-		default: 'B12'
-	},
-	assemblyId: {
-		type: String,
-		default: '01'
-	},
-	priority: {
-		type: Number,
-		default: 3
-	},
-	pictureURL: {
-		type: String,
-		default: 'www.google.com'
-	},
-	comments: {
-		type: [String] // Needs to be an array of valid comments
-	},
-	createdDate: {
+	date: {
 		type: Date,
 		default: Date.now
+	},
+	children: {
+		type: [String],
+		default: []
+	},
+	author: {
+		name: {
+			type: String,
+			// required: 'User Name Required',
+			default: 'Mr. Baba'
+		},
+		imgUrl: {
+			type: String,
+			default: 'www.google.com'
+		}
 	}
-	// status: {
-	// 	type: [{
-	// 		type: String,
-	// 		enum: ['pending', 'ongoing', 'completed']
-	// 	}],
-	// 	default: ['pending']
-	// }
 });
 
-module.exports = mongoose.model('Parts', PartSchema);
+PartCommentSchema.post('init', function (doc) {
+	console.log('%s has been initialized from the db', doc._id);
+});
+
+PartCommentSchema.pre('validate', function (next) {
+	// console.log('this gets printed first');
+	next()
+});
+
+PartCommentSchema.post('validate', function (doc) {
+	// console.log('this gets printed second');
+	// console.log(doc);
+	doc.slug = generateSlug()
+});
+
+PartCommentSchema.pre('save', function (next) {
+	// console.log('this gets printed third');
+	next()
+});
+
+PartCommentSchema.post('save', function (doc) {
+	// console.log('this gets printed fourth');
+	// console.log('%s has been saved', doc);
+});
+
+PartCommentSchema.post('remove', function (doc) {
+	// console.log('%s has been removed', doc._id);
+});
+
+
+// PartCommentSchema.pre('save', function(next) {
+// 	console.log('presave hit');
+// 	console.log(this);
+// 	console.log('end of presave')
+// 	next()
+// // });
+// }
+function generateSlug() {
+	var uuid = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+	return uuid.slice(0, 6);
+}
+module.exports = mongoose.model('PartComment', PartCommentSchema);
 
 // id: number;
 // name: string;
