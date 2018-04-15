@@ -55,14 +55,14 @@ app.use(mongo);
 // 	console.log("DB opened");
 // });
 
-var mongoose = require('mongoose');
+// var mongoose = require('mongoose');
 
-const Cat = mongoose.model('Cat', {name: String});
+// const Cat = mongoose.model('Cat', {name: String});
 
-const kitty = new Cat({name: 'Zildjian'});
-kitty.save().then(function () {
-	console.log('meow')
-});
+// const kitty = new Cat({name: 'Zildjian'});
+// kitty.save().then(function () {
+// 	console.log('meow')
+// });
 
 
 //***********View Engine Setup***************
@@ -141,6 +141,9 @@ app.use('/', routes);
 // app.use('/users', users);
 users(app);
 parts(app);
+
+var AuthController = require('./auth/AuthController');
+app.use('/', AuthController);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

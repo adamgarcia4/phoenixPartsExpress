@@ -6,8 +6,8 @@ module.exports = function(app) {
 	app.route('/login')
 		.post(usersController.authenticateUser);
 
-	app.route('/register')
-		.post(usersController.registerUser);
+	// app.route('/register')
+	// 	.post(usersController.registerUser);
 
 
 	// app.route('/users/:taskId')
