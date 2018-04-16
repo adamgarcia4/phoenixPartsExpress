@@ -17,22 +17,22 @@ var bodyParser = require('body-parser');
 var expressValidator = require('express-validator');
 
 // Session/Passport Middleware
-var session = require('express-session');
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
+// var session = require('express-session');
+// var passport = require('passport');
+// var LocalStrategy = require('passport-local').Strategy;
 
 
 // Flash Message Handlers
-var flash = require('connect-flash');
+// var flash = require('connect-flash');
 
 // View/templating Engine
-var exphbs = require('express-handlebars');
+// var exphbs = require('express-handlebars');
 
 //Initialize app
 var app = express();
 
-var Part = require('./models/Parts');
-var PartComment = require('./models/PartComment');
+// var Part = require('./models/Parts');
+// var PartComment = require('./models/PartComment');
 
 
 // const mongoose = require('mongoose');
@@ -66,9 +66,9 @@ app.use(mongo);
 
 
 //***********View Engine Setup***************
-app.set('views', path.join(__dirname, 'views'));
-app.engine('handlebars', exphbs({defaultLayout: 'layout'}));
-app.set('view engine', 'handlebars');
+// app.set('views', path.join(__dirname, 'views'));
+// app.engine('handlebars', exphbs({defaultLayout: 'layout'}));
+// app.set('view engine', 'handlebars');
 
 
 //***********Parser Middlewares****************
@@ -84,63 +84,63 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Express Validator
-app.use(expressValidator({
-	errorFormatter: function (param, msg, value) {
-		var namespace = param.split('.')
-			, root = namespace.shift()
-			, formParam = root;
-
-		while (namespace.length) {
-			formParam += '[' + namespace.shift() + ']';
-		}
-		return {
-			param: formParam,
-			msg: msg,
-			value: value
-		};
-	}
-}));
+// app.use(expressValidator({
+// 	errorFormatter: function (param, msg, value) {
+// 		var namespace = param.split('.')
+// 			, root = namespace.shift()
+// 			, formParam = root;
+//
+// 		while (namespace.length) {
+// 			formParam += '[' + namespace.shift() + ']';
+// 		}
+// 		return {
+// 			param: formParam,
+// 			msg: msg,
+// 			value: value
+// 		};
+// 	}
+// }));
 
 
 //*************Session Setup********************
 
 // Express Session Initialization
-app.use(session({
-	secret: 'secret',
-	resave: true,
-	saveUninitialized: true
-}));
+// app.use(session({
+// 	secret: 'secret',
+// 	resave: true,
+// 	saveUninitialized: true
+// }));
 
 // Passport Configuration
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 
 //************Connect Flash********************
 
-app.use(flash());
+// app.use(flash());
 
 // Global Vars
-app.use(function (req, res, next) {
+/*app.use(function (req, res, next) {
 	res.locals.success_msg = req.flash('success_msg');
 	res.locals.error_msg = req.flash('error_msg');
 	res.locals.error = req.flash('error'); //passport sets its own errors to error
 	res.locals.user = req.user || null;
 	next();
-});
+});*/
 
 
 //**********Routes Middleware******************
 
 // Establish routing handles
-var routes = require('./routes/index');
-var users = require('./routes/users');
+// var routes = require('./routes/index');
+var users = require('./auth/user.route');
 var parts = require('./routes/parts');
 
-app.use('/', routes);
+// app.use('/', routes);
 // app.use('/users', users);
 users(app);
-parts(app);
+// parts(app);
 
 var AuthController = require('./auth/AuthController');
 app.use('/', AuthController);

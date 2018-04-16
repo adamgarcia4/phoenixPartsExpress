@@ -19,3 +19,8 @@ https://docs.mongodb.com/ecosystem/use-cases/storing-comments/
 https://stackoverflow.com/questions/46019926/updating-slug-with-mongoose-presave
 
 https://stackoverflow.com/questions/3923015/remove-leading-comma-from-a-string
+
+
+
+This is how I set up my JWT auth system:
+https://medium.freecodecamp.org/securing-node-js-restful-apis-with-json-web-tokens-9f811a92bb52
