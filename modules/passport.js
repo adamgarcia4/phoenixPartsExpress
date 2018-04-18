@@ -3,7 +3,7 @@ var passport = require('passport');
 var localStrategy = require('passport-local').Strategy;
 
 // // Model Dependency
-var User = require("../models/User.js");
+var User = require("../auth/models/user.model.js");
 
 passport.use(new localStrategy(
     function(username, password, done) {

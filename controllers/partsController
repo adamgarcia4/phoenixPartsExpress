@@ -1,6 +1,7 @@
 'use strict';
 
 var mongoose = require('mongoose');
+
 var Part = mongoose.model('Parts');
 var Comment = mongoose.model('PartComment');
 

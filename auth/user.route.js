@@ -1,61 +1,24 @@
+'use strict';
 
-var passport = require('../modules/passport');
+var auth = require('../auth/authProtect');
+var usersController = require('./controllers/user.controller');
 
-exports.authenticateUser = function(req,res) {
-	console.log('Authenticate User time!');
+module.exports = function(app) {
+
+
+	// todoList Routes
+	app.route('/login')
+		.post(usersController.authenticateUser);
+	app.route('/register')
+		.post(usersController.registerUser);
+	app.route('/me')
+		.post(auth, usersController.me);
+	// app.route('/users/:taskId')
+	// 	.get(todoList.read_a_task)
+	// 	.put(todoList.update_a_task)
+	// 	.delete(todoList.delete_a_task);
 };
 
-exports.registerUser = function(req, res) {
-	console.log('Time to register a user!!');
-};
-
-
-//
-// // Users.js--Route Handler
-// //********Import Dependencies************
-//
-// var express = require('express');
-// var router = express.Router();
-//
-// // Passport Dependencies
-// var passport = require('passport');
-// var localStrategy = require('passport-local').Strategy;
-//
-// // Model Dependency
-// var User = require("../models/User.js");
-//
-
-//
-// //************Passport Strategy Setup*************
-//
-//
-// //**************Routes*****************
-//
-// /* GET users listing. */
-// router.get('/', function(req, res, next) {
-//   res.render('login');
-// });
-//
-//
-// //**************Login**********************
-// router.get('/login', function(req, res, next) {
-//   //render view
-//   res.render('login');
-// });
-//
-// router.post('/login',
-//     passport.authenticate('local', {
-//         successRedirect:'/',
-//         failureRedirect:'/users/login',
-//         failureFlash: true}
-//     ),
-//     function(req, res) {
-//         res.redirect('/');
-//     }
-// );
-//
-//
-//
 //     // router.post('/login',function(req, res) {
 //
 // //****************Register*********************
