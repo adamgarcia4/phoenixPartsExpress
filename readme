@@ -1,0 +1,26 @@
+https://12factor.net/config
+https://stackoverflow.com/questions/18880142/access-app-variable-inside-of-expressjs-connectjs-middleware
+https://expressjs.com/en/guide/writing-middleware.html
+https://stackoverflow.com/questions/34468395/express-call-a-middleware-from-another-middleware
+
+
+
+https://www.npmjs.com/package/performant-array-to-tree
+https://stackoverflow.com/questions/22367711/construct-hierarchy-tree-from-flat-list-with-parent-field
+https://stackoverflow.com/questions/6232753/convert-delimited-string-into-hierarchical-json-with-jquery
+https://gist.github.com/lineus/99c9e574fdefc2c84b932b6e949c7c8e
+
+
+https://docs.mongodb.com/ecosystem/use-cases/storing-comments/
+http://blog.ijasoneverett.com/2013/11/getting-started-with-mongoose-and-node-js-a-sample-comments-system/
+https://www.mongodb.com/blog/post/thinking-documents-part-1?jmp=docs&_ga=2.218000982.134088568.1521985698-1047311511.1521985698
+
+https://docs.mongodb.com/ecosystem/use-cases/storing-comments/
+https://stackoverflow.com/questions/46019926/updating-slug-with-mongoose-presave
+
+https://stackoverflow.com/questions/3923015/remove-leading-comma-from-a-string
+
+
+
+This is how I set up my JWT auth system:
+https://medium.freecodecamp.org/securing-node-js-restful-apis-with-json-web-tokens-9f811a92bb52

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "nodemon ./bin/www"
   },
   "dependencies": {
     "bcryptjs": "^2.3.0",
@@ -14,12 +14,15 @@
     "dotenv": "^2.0.0",
     "express": "~4.13.4",
     "express-handlebars": "^3.0.0",
+    "express-jwt": "^5.3.1",
     "express-session": "^1.14.0",
-    "express-validator": "^2.20.8",
+    "express-validator": "^2.21.0",
     "firebase": "^3.0.5",
     "jade": "~1.11.0",
-    "mongoose": "^4.5.3",
+    "jsonwebtoken": "^8.2.1",
+    "mongoose": "^4.13.12",
     "morgan": "~1.7.0",
+    "nodemon": "^1.17.2",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "serve-favicon": "~2.3.0"

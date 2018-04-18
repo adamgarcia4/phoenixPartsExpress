@@ -1,0 +1,87 @@
+'use strict';
+
+var mongoose = require('mongoose');
+
+var Part = mongoose.model('Parts');
+var Comment = mongoose.model('PartComment');
+
+exports.listAllParts = function(req, res) {
+
+	Part.find({}, function(err, part) {
+		if (err)
+			res.send(err);
+		res.json(part);
+	});
+};
+
+
+exports.createPart = function(req, res) {
+
+	// Extract part fields from request
+	var new_part_obj = {
+		name: req.body.name,
+		comments: req.body.comments
+	};
+	// console.log(new_part_obj.comments);
+
+	// TODO: Validation checking
+	const new_part = new Part(new_part_obj);
+
+	// Save Part to Database
+	new_part.save().then(function(err,part) {
+		if(err) res.send(err);
+		res.json(part);
+	});
+
+	var new_comment_obj = {
+		body: 'Test body'
+	};
+
+	const new_comment = new Comment(new_comment_obj);
+
+	new_comment.save().then(function(err, com) {
+		console.log('save hit!')
+		console.log(com);
+	});
+
+};
+
+
+exports.getPartById = function(req, res) {
+
+	var partId = req.params.partId;
+
+	Part.findById(partId, function(err, task) {
+		if (err)
+			res.send(err);
+		res.json(task);
+	});
+};
+
+
+exports.updatePart = function(req, res) {
+
+	var partId = req.params.partId;
+	var newData = req.body;
+
+	Part.findOneAndUpdate({_id: partId}, newData, {new: true}, function(err, task) {
+
+		if (err)
+			res.send(err);
+		res.json(task);
+	});
+};
+
+
+exports.deleteTask = function(req, res) {
+
+	var partId = req.params.partId;
+
+	Part.remove({
+		_id: partId
+	}, function(err, part) {
+		if (err)
+			res.send(err);
+		res.json({ message: 'Part successfully deleted', data: part });
+	});
+};
