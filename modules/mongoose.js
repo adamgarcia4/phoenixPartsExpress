@@ -3,6 +3,7 @@
 // Establish MongoDB Connection
 var mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
+
 var connectDBLink = process.env.MONGO_DB;
 mongoose.connect(connectDBLink);
 var db = mongoose.connection;

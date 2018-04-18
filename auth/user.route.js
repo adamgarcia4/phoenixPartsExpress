@@ -1,75 +1,24 @@
 'use strict';
+
+var auth = require('../auth/authProtect');
+var usersController = require('./controllers/user.controller');
+
 module.exports = function(app) {
-	var usersController = require('./controllers/user.controller');
+
 
 	// todoList Routes
-	app.route('/logintest')
+	app.route('/login')
 		.post(usersController.authenticateUser);
 	app.route('/register')
 		.post(usersController.registerUser);
-
-	// app.route('/register')
-	// 	.post(usersController.registerUser);
-
-
+	app.route('/me')
+		.post(auth, usersController.me);
 	// app.route('/users/:taskId')
 	// 	.get(todoList.read_a_task)
 	// 	.put(todoList.update_a_task)
 	// 	.delete(todoList.delete_a_task);
 };
 
-//
-// // Users.js--Route Handler
-// //********Import Dependencies************
-//
-// var express = require('express');
-// var router = express.Router();
-//
-// // Passport Dependencies
-// var passport = require('passport');
-// var localStrategy = require('passport-local').Strategy;
-//
-// // Model Dependency
-// var User = require("../models/User.js");
-//
-
-//
-// //************Passport Strategy Setup*************
-//
-// passport.use(new localStrategy(
-//     function(username, password, done) {
-//         User.getUserByUsername(username, function(err, user) {
-//             if(err) throw err;
-//             if(!user) {
-//                 return(null, false, {message: 'Unknown User'});
-//             }
-//             User.comparePassword(password, user.password,function(err, isMatch) {
-//                 if(err) throw err;
-//                 if(isMatch) {
-//                     return done(null, user);
-//                 } else {
-//                     return done(null, false, {message: 'Invalid Password'});
-//                 }
-//             });
-//         });
-//     }
-// ));
-//
-// passport.serializeUser(function(user, done) {
-//   done(null, user.id);
-// });
-//
-// passport.deserializeUser(function(id, done) {
-//   User.getUserById(id, function(err, user) {
-//     done(err, user);
-//   });
-// });
-//
-// //**************Routes*****************
-
-//
-//
-//
 //     // router.post('/login',function(req, res) {
 //
 // //****************Register*********************
