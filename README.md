@@ -75,9 +75,9 @@ As you can see, the top level of this module provides a very clean implementatio
 ## MongoDB Module
 
 ### Background
-Integral to the functioning of this application is a persistant database.  When deciding on a way to persist data, there are many choices to be made.  The highest-level choice is between Relational databases(RDBs) and Non-relational databases.  While this is a large topic in it's own right, two primary ways to start the choice process is by modeling the data interaction via an [Entity-Relationship model(ER)](https://en.wikipedia.org/wiki/Entity%E2%80%93relationship_model).  This helps to arrive at a solid understanding of the data being stored, and is a great place to start.
+Integral to the functioning of this application is a persistant database.  When deciding on a way to persist data, there are many choices to be made.  The highest-level choice is between Relational databases(RDBs) and Non-relational databases.  While this is a large topic in it's own right, two primary ways to start the choice process is by modeling the data interaction via an [Entity-Relationship model(ER)](https://en.wikipedia.org/wiki/Entity%E2%80%93relationship_model).  This helps to arrive at a solid understanding of the data being stored, and is a great place to start.  Below is a model of the proposed ER diagram for this application (This project is still in development, so not all functionality is instituted).
 
-//TODO: Add my ER model here.
+<img src="https://github.com/adamgarcia4/phoenixPartsExpress/blob/readme/Phoenix%20Parts%20ER%20diagram.jpeg?raw=true" alt="alt text" width="700">
 
 While an ER model is formally used for relational databases, due to connections in the ER diagram translating directly to primary/foreign keys in the RDBs, it is also very convenient even if a non-relational database is chosen.  This is because, there are two ways for a Non-relational database to be implemented.  In fact, a proper implementation of a non-relational database can have both types of implementations: Embedded vs. Reference.  A full coverage of the advantages/tradeoffs of each can be found in this [Microsoft Talk](https://goo.gl/grasnP).
 
