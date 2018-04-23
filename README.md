@@ -17,10 +17,56 @@ The main objectives for the Phoenix Parts Backend are:
 ## Overall Software Architecture (Node.js Backend)
 The Node.js server is built with Composabilitity and Modularity in mind.  The overarching goal is to design a server as a composition of logically separated modules.  The rest of this readme will be focused around explaining the rationale for the separation of concerns chosen.
 
+## General Module Architecture
+As one of the main priorities is designing with Modularity in mind, a standardized module structure was deemed necessary.  
+
+Inspiration was taken from Angular's Style of Dependency Injection, whereby a module's specific implementation should be abstracted away from any of it's consumers.  More details about can be found at the link: https://goo.gl/8sL2u5.  Research led to three different ways do modularize a javascript codebase without typescript support.  The three options ar summarized by Krzysztof Sztompka in the Stack Overflow article: https://goo.gl/9N6Hpm.
+
+Due to cleanliness, a modularization system was chosen to work as follows.
+
+```javascript
+// Module.js
+module.exports = function(app) {
+  // app represents Express.js server.  Thus, perform all related work in this module.
+};
+```
+
+Once the module is created, it is then incorporated into the top-level application in the following manner.
+```javascript
+var moduleName = require('<./path/to/module>');
+moduleName(app);
+```
+
+That's it!  With one line of code, the module is incorporated into the main application.  This method of modularity proved to be the cleanest implementation, and thus is the standard for use in this application.
+
 ## Routing Layer
-The core functionality of an API backend is to listen to routes and serve corresponding API responses.  However,
+
+The core functionality of an API backend is to listen to routes and serve corresponding API responses.  Two primary areas of concern are important to the routing layer:
+
+1.  Control of route endpoint names
+2.  Implementation of correct route behavior
+
+While most Express.js tutorials combine these two listed goals into one file, a cleaner implementation was suggested by: https://goo.gl/R4qXRM, which splits these into two further modularized concepts.
+
+The Routing module is designed as follows:
+
+```javascript
+// user.route.js
+module.exports = function(app) {
+
+	app.route('/login')
+		.post(usersController.authenticateUser);
+	app.route('/register')
+		.post(usersController.registerUser);
+	app.route('/me')
+		.post(auth, usersController.me);
+};
+```
+
+As you can see, the top level of this module provides a very clean implementation of the routing logic, with specific functional implementation given over to the controller.  This provides for a very clean and intuitive routing implementation.  It is then the responsibility of the controller to handle database calls and forming the API response.
 
 
+// TODO
 
 Below is the architecture of the backend system that I designed, coded, and deployed to support the engineering efforts.  Much effort was made to establish a clear separation of concerns as well as establishing modularity to make scaling and future expansions at the database layer trivial.
 <img src="https://github.com/adamgarcia4/Take-Sessions-GraphQL-Server/blob/adamgarcia4-patch-1/systemDesign.jpg?raw=true" alt="alt text" width="700">
