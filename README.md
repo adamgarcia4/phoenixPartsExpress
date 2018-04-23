@@ -39,14 +39,14 @@ moduleName(app);
 
 That's it!  With one line of code, the module is incorporated into the main application.  This method of modularity proved to be the cleanest implementation, and thus is the standard for use in this application.
 
-## Routing Layer
+## Routing Module
 
 The core functionality of an API backend is to listen to routes and serve corresponding API responses.  Two primary areas of concern are important to the routing layer:
 
 1.  Control of route endpoint names
 2.  Implementation of correct route behavior
 
-While most Express.js tutorials combine these two listed goals into one file, a cleaner implementation was suggested by: https://goo.gl/R4qXRM, which splits these into two further modularized concepts.
+While most Express.js tutorials combine these two listed goals into one file, a cleaner implementation was suggested by: https://goo.gl/eB7dmZ, which splits these into two further modularized concepts.
 
 The Routing module is designed as follows:
 
@@ -63,10 +63,27 @@ module.exports = function(app) {
 };
 ```
 
-As you can see, the top level of this module provides a very clean implementation of the routing logic, with specific functional implementation given over to the controller.  This provides for a very clean and intuitive routing implementation.  It is then the responsibility of the controller to handle database calls and forming the API response.
+As you can see, the top level of this module provides a very clean implementation of the routing logic, with specific functional implementation given over to the controller.  This provides for a very clean and intuitive routing implementation.  It is then the responsibility of the controller to handle database calls and forming the API response.  One route module is created per resource entity, as dictated by business logic (ie: Users, Parts, Machines, etc...).
 
+## Mongdb Module
 
-// TODO
+### Background
+Integral to the functioning of this application is a persistant database.  When deciding on a way to persist data, there are many choices to be made.  The highest-level choice is between Relational databases(RDBs) and Non-relational databases.  While this is a large topic in it's own right, two primary ways to start the choice process is by modeling the data interaction via an [Entity-Relationship model(ER)](https://en.wikipedia.org/wiki/Entity%E2%80%93relationship_model).  This helps to arrive at a solid understanding of the data being stored, and is a great place to start.
+
+//TODO: Add my ER model here.
+
+While an ER model is formally used for relational databases, due to connections in the ER diagram translating directly to primary/foreign keys in the RDBs, it is also very convenient even if a non-relational database is chosen.  This is because, there are two ways for a Non-relational database to be implemented.  In fact, a proper implementation of a non-relational database can have both types of implementations: Embedded vs. Reference.  A full coverage of the advantages/tradeoffs of each can be found in this [Microsoft Talk](https://goo.gl/grasnP).
+
+In my project, I made the decision to use the Non-relational database known as MongoDb.  My choice of using MongoDb is for the added flexibility that MongoDb provides a developer in data-modeling.  There is a big misconception that MongoDb is `Schema-less`.  While it is true that, at the database layer, MongoDb does not enforce a particular schema, it is a best-practice for a developer to enforce a schema at the application-layer.  This ensures consistency across documents in a collection.
+
+To achieve this, a widely popular Object Document Modeling npm package known as [Mongoose](http://mongoosejs.com/) is used.
+
+### MongoDb Module Implementation
+
+Again, the same Module implementation is used, as detailed in the above section.
+
+//TODO: Create reference link to the above section.
+
 
 Below is the architecture of the backend system that I designed, coded, and deployed to support the engineering efforts.  Much effort was made to establish a clear separation of concerns as well as establishing modularity to make scaling and future expansions at the database layer trivial.
 <img src="https://github.com/adamgarcia4/Take-Sessions-GraphQL-Server/blob/adamgarcia4-patch-1/systemDesign.jpg?raw=true" alt="alt text" width="700">
