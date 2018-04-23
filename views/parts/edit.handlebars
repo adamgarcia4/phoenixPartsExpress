@@ -1,0 +1,55 @@
+<h2 class="page-header">Create Part Here</h2>
+
+{{#if errors}}
+    <div class="alert alert-danger">
+    <ul class="list-group">
+    {{#each errors}}
+            <li class="list-group-item">{{msg}}</li>
+    {{/each}}
+    </ul>
+    </div>
+{{/if}}
+
+<form method="post" action="/parts/update">
+	<div class="form-group">
+		<label>Part Number</label>
+		<input type="number" class="form-control" value="{{locals.retrPart.partNumber}}" placeholder="Part Number" name="partNumber">
+	</div>
+
+	<div class="form-group">
+		<label>Project Id</label>
+		<input type="number" class="form-control" value="{{locals.retrPart.partNumber}}" placeholder="Project Id" name="projectId">
+	</div>
+
+	<div class="form-group">
+		<label>Part Type</label>
+		<input type="text" class="form-control" value="{{locals.retrPart.partType}}" placeholder="Part Type" name="partType">
+	</div>
+
+	<div class="form-group">
+		<label>Part Name</label>
+		<input type="text" class="form-control" value="{{locals.retrPart.partName}}" placeholder="Part Name" name="partName">
+	</div>
+
+	<div class="form-group">
+		<label>Notes</label>
+		<input type="text" class="form-control" value="{{locals.retrPart.notes}}" placeholder="Notes" name="notes">
+	</div>
+
+	<div class="form-group">
+		<label>Status</label>
+		<input type="text" class="form-control" value="{{locals.retrPart.status}}" placeholder="Part Status" name="status">
+	</div>
+
+	<div class="form-group">
+		<label>Quantity</label>
+		<input type="text" class="form-control" value="{{locals.retrPart.quantity}}" placeholder="Quantity" name="quantity">
+	</div>
+	
+	<button type="submit" class="btn btn-default">Submit</button>
+
+
+</form>
+
+{{locals.retrPart}}
+{{locals.partNum}}

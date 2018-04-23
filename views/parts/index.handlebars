@@ -1,0 +1,29 @@
+<h2 class="page-header">Part Dashboard</h2>
+<p>Welcome to your dashboard!</p>
+
+<div class="container-fluid">
+	<table class="table table-hover table-striped table-bordered">
+		<thead>
+			<tr>
+				<th>Part Number</th>
+				<th>Type</th>
+				<th>Name</th>
+				<th>Status</th>
+				<th>Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			{{#each locals.partsList}}
+				<tr>
+					<th scope="row">{{this.partNumber}}</th>
+					<td>{{this.partType}}</td>
+					<td>{{this.partName}}</td>
+					<td>{{this.status}}</td>
+					<td>Action</td>
+				</tr>
+			{{/each}}
+		</tbody>
+	</table>
+</div>
+
+<a href="/parts/create" class="btn btn-success">Create Part</a>

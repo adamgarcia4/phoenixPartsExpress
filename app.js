@@ -1,4 +1,4 @@
-// Server Injection Head
+// App Starting Point
 
 //*********Import Middlewares*************
 
@@ -25,7 +25,7 @@ app.use(mongo);
 //***********Parser Middlewares****************
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico'))); //TODO: Favicon Doesn't work
+app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico'))); //TODO: Favicon Doesn't work
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -45,6 +45,8 @@ var parts = require('./routes/parts');
 users(app);
 // parts(app);
 
+// TODO: given the current way that the routing middleware works, no next() is called.
+// Thus, these middlewares are never called.
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
 	var err = new Error('Not Found');
